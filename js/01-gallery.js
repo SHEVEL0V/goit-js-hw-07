@@ -2,7 +2,7 @@ import { galleryItems } from "./gallery-items.js";
 
 const galleryEl = document.querySelector(".gallery");
 
-let instance = basicLightbox.create("");
+let lightbox = null;
 
 function addItemGallery() {
   return galleryItems
@@ -22,19 +22,28 @@ function addItemGallery() {
 }
 
 function onModal(e) {
+  lightbox = basicLightbox.create(
+    `<img src=${e.target.dataset.source} width="800" height="600">`,
+    {
+      onShow: () => {
+        document.addEventListener("keydown", modalCloseEsc);
+      },
+      onClose: () => {
+        document.removeEventListener("keydown", modalCloseEsc);
+      },
+    }
+  );
+
   if (e.target.nodeName === "IMG") {
-    instance = basicLightbox.create(`
-    <img src=${e.target.dataset.source} width="800" height="600">`);
-    return instance.show();
+    lightbox.show();
   }
 }
 
 function modalCloseEsc(e) {
   if (e.code === "Escape") {
-    instance.close();
+    lightbox.close();
   }
 }
 
 galleryEl.insertAdjacentHTML("beforeend", addItemGallery(galleryItems));
 galleryEl.addEventListener("click", onModal);
-document.addEventListener("keydown", modalCloseEsc);
