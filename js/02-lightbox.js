@@ -17,7 +17,7 @@ function addItemGallery() {
     .join("");
 }
 
-var lightbox = new SimpleLightbox(".gallery a", {
+new SimpleLightbox(".gallery a", {
   captions: true,
   captionsData: "alt",
   captionPosition: "bottom",
